@@ -10,3 +10,5 @@ node_modules/
 # Ignore build output
 dist/
 build/
+#ignore auth info 
+auth_info/

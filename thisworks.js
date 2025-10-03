@@ -75,7 +75,7 @@ async function startBot() {
   sock.ev.on("messages.upsert", async ({ messages }) => {
     const msg = messages[0];
     if (!msg.message) return;
-    if (msg.key.fromMe) return;
+    // if (msg.key.fromMe) return;
 
     const sender = msg.key.remoteJid;
     console.log("📩 New message from", sender);
@@ -228,7 +228,10 @@ async function connectWebSocket(filePath) {
     console.log("✅ Connected to Ultravox");
     startAudioStreaming(ws, filePath);
   });
-
+  ws.on("error", (err) => {
+    console.error("❌ WebSocket error:", err.message);
+    setTimeout(connectWebSocket, 5000); // retry after 5s
+  });
   ws.on("message", (data) => {
     if (data instanceof Buffer) {
       console.log(`🎵 Received audio chunk (${data.length} bytes)`);

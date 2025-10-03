@@ -238,7 +238,10 @@ async function connectWebSocket(filePath) {
       handleDataMessage(message, ws);
     }
   });
-
+  ws.on("error", (err) => {
+    console.error("❌ WebSocket error:", err.message);
+    setTimeout(connectWebSocket, 5000); // retry after 5s
+  });
   return new Promise((resolve) => {
     ws.on("close", () => {
       console.log("🔌 Ultravox connection closed");
